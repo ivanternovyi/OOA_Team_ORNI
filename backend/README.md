@@ -2,7 +2,7 @@
 
 # API written in Ruby to manage articles.
 
-## How to user Bearer token
+## How to use Bearer token
 Just add `Authorization: Bearer VALID_USER_TOKEN` to request headers
 
 ## Endpoints
