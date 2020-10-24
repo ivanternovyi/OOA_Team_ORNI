@@ -5,6 +5,8 @@ class Article < ApplicationRecord
     'tweet'
   ]
 
+  belongs_to :user
+
   validates :name, presence: true
   validates :text, presence: true
   validates :article_type, inclusion: { in: VALID_ARTICLE_TYPES }

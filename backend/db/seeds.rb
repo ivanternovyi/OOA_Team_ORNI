@@ -6,10 +6,13 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
+user = User.create(name: Faker::Lorem.word.capitalize, password: Faker::Lorem.word)
+
 50.times do
   Article.create(
     name: Faker::Lorem.word.capitalize,
     text: Faker::Lorem.sentence,
-    article_type: Article::VALID_ARTICLE_TYPES.sample
+    article_type: Article::VALID_ARTICLE_TYPES.sample,
+    user_id: user.id
   )
 end

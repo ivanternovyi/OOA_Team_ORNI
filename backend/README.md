@@ -2,7 +2,14 @@
 
 # API written in Ruby to manage articles.
 
+## How to user Bearer token
+Just add `Authorization: Bearer VALID_USER_TOKEN` to request headers
+
 ## Endpoints
+- `POST /api/v1/login` to log in (returns user name and bearer token)
+- `POST /api/v1/signup` to signup (returns user name and bearer token)
+### All endpoints below requires `bearer token`
+- `GET /api/v1/articles` to get all articles
 - `GET /api/v1/articles?keyword=SOME_KEYWORD` to search by keyword(part of `name` or `text`)
 - `GET /api/v1/articles?order_field=FIELD&order_direction=DIRECTION` to order by `name`, `text`, `article_type`, `updated_at` or `created_at` in `ASC` or `DESC` direction,
 - `GET /api/v1/articles/:id` to get article

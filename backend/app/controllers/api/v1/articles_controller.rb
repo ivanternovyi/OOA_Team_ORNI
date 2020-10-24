@@ -4,7 +4,7 @@ module Api::V1
 
     # GET /api/v1/articles
     def index
-      filtered_articles = ::ArticleQuery.new(params).call
+      filtered_articles = ::ArticleQuery.new(params, current_user.articles).call
 
       render json: ArticleCollectionSerializer.new(filtered_articles).call, status: :ok
     end
@@ -23,7 +23,7 @@ module Api::V1
 
     # POST /api/v1/articles
     def create
-      @article = Article.create!(article_params)
+      @article = Article.create!(article_params.merge(user_id: current_user.id))
 
       render json: ArticleSerializer.new(@article).call, status: :created
     end
