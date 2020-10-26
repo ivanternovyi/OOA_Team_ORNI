@@ -1,9 +1,14 @@
 require 'rails_helper'
 
 RSpec.describe Api::V1::ArticlesController, type: :request do
+  let(:user) { create(:user) }
+  let(:valid_headers) do
+    { 'Authorization'.freeze => "Bearer #{user.token}" }
+  end
+
   describe 'GET /api/v1/articles' do
     it 'returns a success response' do
-      get '/api/v1/articles', params: {}
+      get '/api/v1/articles', headers: valid_headers
 
       expect(response).to be_successful
     end
@@ -11,14 +16,16 @@ RSpec.describe Api::V1::ArticlesController, type: :request do
 
     describe 'orders by' do
       context 'article name' do
-        let!(:article_1) { FactoryBot.create(:article, name: 'aaa') }
-        let!(:article_2) { FactoryBot.create(:article, name: 'bbb') }
+        let!(:article_1) { FactoryBot.create(:article, name: 'aaa', user_id: user.id) }
+        let!(:article_2) { FactoryBot.create(:article, name: 'bbb', user_id: user.id) }
 
         it 'ASC direction' do
-          get '/api/v1/articles', params: {
-                                    order_field: 'name',
-                                    order_direction: 'ASC'
-                                  }
+          get '/api/v1/articles',
+              headers: valid_headers,
+              params: {
+                order_field: 'name',
+                order_direction: 'ASC'
+              }
   
           parsed_response = JSON.parse(response.body)
   
@@ -27,10 +34,12 @@ RSpec.describe Api::V1::ArticlesController, type: :request do
         end
   
         it 'DESC direction' do
-          get '/api/v1/articles', params: {
-            order_field: 'name',
-            order_direction: 'DESC'
-          }
+          get '/api/v1/articles',
+              headers: valid_headers,
+              params: {
+                order_field: 'name',
+                order_direction: 'DESC'
+              }
   
           parsed_response = JSON.parse(response.body)
   
@@ -40,14 +49,28 @@ RSpec.describe Api::V1::ArticlesController, type: :request do
       end
 
       context 'article article_type' do
-        let!(:article_1) { FactoryBot.create(:article, article_type: Article::VALID_ARTICLE_TYPES.sort.first) }
-        let!(:article_2) { FactoryBot.create(:article, article_type: Article::VALID_ARTICLE_TYPES.sort.last) }
+        let!(:article_1) do
+          FactoryBot.create(
+            :article,
+            article_type: Article::VALID_ARTICLE_TYPES.sort.first,
+            user_id: user.id
+          )
+        end
+        let!(:article_2) do
+          FactoryBot.create(
+            :article,
+            article_type: Article::VALID_ARTICLE_TYPES.sort.last,
+            user_id: user.id
+          )
+        end
 
         it 'ASC direction' do
-          get '/api/v1/articles', params: {
-                                    order_field: 'article_type',
-                                    order_direction: 'ASC'
-                                  }
+          get '/api/v1/articles',
+              headers: valid_headers,
+              params: {
+                order_field: 'article_type',
+                order_direction: 'ASC'
+              }
   
           parsed_response = JSON.parse(response.body)
   
@@ -56,10 +79,12 @@ RSpec.describe Api::V1::ArticlesController, type: :request do
         end
   
         it 'DESC direction' do
-          get '/api/v1/articles', params: {
-            order_field: 'article_type',
-            order_direction: 'DESC'
-          }
+          get '/api/v1/articles',
+              headers: valid_headers,
+              params: {
+                order_field: 'article_type',
+                order_direction: 'DESC'
+              }
   
           parsed_response = JSON.parse(response.body)
   
@@ -69,14 +94,16 @@ RSpec.describe Api::V1::ArticlesController, type: :request do
       end
 
       context 'article text' do
-        let!(:article_1) { FactoryBot.create(:article, text: 'aaaa') }
-        let!(:article_2) { FactoryBot.create(:article, text: 'bbbb') }
+        let!(:article_1) { FactoryBot.create(:article, text: 'aaaa', user_id: user.id) }
+        let!(:article_2) { FactoryBot.create(:article, text: 'bbbb', user_id: user.id) }
 
         it 'ASC direction' do
-          get '/api/v1/articles', params: {
-                                    order_field: 'text',
-                                    order_direction: 'ASC'
-                                  }
+          get '/api/v1/articles',
+              headers: valid_headers,
+              params: {
+                order_field: 'text',
+                order_direction: 'ASC'
+              }
   
           parsed_response = JSON.parse(response.body)
   
@@ -85,10 +112,12 @@ RSpec.describe Api::V1::ArticlesController, type: :request do
         end
   
         it 'DESC direction' do
-          get '/api/v1/articles', params: {
-                                    order_field: 'text',
-                                    order_direction: 'DESC'
-                                  }
+          get '/api/v1/articles',
+              headers: valid_headers,
+              params: {
+                order_field: 'text',
+                order_direction: 'DESC'
+              }
   
           parsed_response = JSON.parse(response.body)
   
@@ -99,13 +128,15 @@ RSpec.describe Api::V1::ArticlesController, type: :request do
     end
 
     describe 'search by keyword functionality' do
-      let!(:article_1) { FactoryBot.create(:article, name: 'aaa', text: "ccc") }
-      let!(:article_2) { FactoryBot.create(:article, name: 'bbb', text: "ddd") }
+      let!(:article_1) { FactoryBot.create(:article, name: 'aaa', text: "ccc", user_id: user.id) }
+      let!(:article_2) { FactoryBot.create(:article, name: 'bbb', text: "ddd", user_id: user.id) }
 
       it 'finds record by article name' do
-        get '/api/v1/articles', params: {
-                                  keyword: article_1.name
-                                }
+        get '/api/v1/articles',
+            headers: valid_headers,
+            params: {
+              keyword: article_1.name
+            }
 
         parsed_response = JSON.parse(response.body)
 
@@ -113,9 +144,11 @@ RSpec.describe Api::V1::ArticlesController, type: :request do
       end
 
       it 'finds record by article text' do
-        get '/api/v1/articles', params: {
-                                  keyword: article_2.text
-                                }
+        get '/api/v1/articles',
+            headers: valid_headers,
+            params: {
+              keyword: article_2.text
+            }
 
         parsed_response = JSON.parse(response.body)
 
@@ -125,10 +158,10 @@ RSpec.describe Api::V1::ArticlesController, type: :request do
   end
 
   describe 'GET /api/v1/articles/:id' do
-    let!(:articles) { create_list(:article, 10) }
+    let!(:articles) { create_list(:article, 10, user_id: user.id) }
     let(:article_id) { articles.first.id }
 
-    before { get "/api/v1/articles/#{article_id}" }
+    before { get "/api/v1/articles/#{article_id}", headers: valid_headers }
 
     context 'when the record exists' do
       it 'returns the article' do
@@ -149,13 +182,13 @@ RSpec.describe Api::V1::ArticlesController, type: :request do
       end
 
       it 'returns a not found message' do
-        expect(response.body).to match(/Couldn't find Article/)
+        expect(response.body).to match(/Record not found!/)
       end
     end
   end
 
   describe 'POST /api/v1/article' do
-    let!(:articles) { create_list(:article, 10) }
+    let!(:articles) { create_list(:article, 10, user_id: user.id) }
     let(:article_id) { articles.first.id }
     let(:valid_attributes) do
       {
@@ -166,7 +199,7 @@ RSpec.describe Api::V1::ArticlesController, type: :request do
     end
 
     context 'when the request is valid' do
-      before { post '/api/v1/articles', params: valid_attributes }
+      before { post '/api/v1/articles', headers: valid_headers, params: valid_attributes }
 
       it 'creates an article' do
         expect(JSON.parse(response.body)['name']).to eq('Name')
@@ -178,7 +211,7 @@ RSpec.describe Api::V1::ArticlesController, type: :request do
     end
 
     context 'when the request is invalid' do
-      before { post '/api/v1/articles', params: { name: 'Name' } }
+      before { post '/api/v1/articles', headers: valid_headers, params: { name: 'Name' } }
 
       it 'returns status code 422' do
         expect(response).to have_http_status(422)
@@ -186,18 +219,22 @@ RSpec.describe Api::V1::ArticlesController, type: :request do
 
       it 'returns a validation failure message' do
         expect(response.body)
-          .to match(/Validation failed: Text can't be blank/)
+          .to match(/Validation failed/)
       end
     end
   end
 
   describe 'PUT /api/v1/articles/:id' do
-    let!(:articles) { create_list(:article, 10) }
+    let!(:articles) { create_list(:article, 10, user_id: user.id) }
     let(:article_id) { articles.first.id }
     let(:valid_attributes) { { name: 'Testing' } }
 
     context 'when the record exists' do
-      before { put "/api/v1/articles/#{article_id}", params: valid_attributes }
+      before do
+        put "/api/v1/articles/#{article_id}",
+            headers: valid_headers,
+            params: valid_attributes
+      end
 
       it 'updates the record' do
         expect(response.body).to be_empty
@@ -210,9 +247,9 @@ RSpec.describe Api::V1::ArticlesController, type: :request do
   end
 
   describe 'DELETE /api/v1/articles/:id' do
-    let!(:articles) { create_list(:article, 10) }
+    let!(:articles) { create_list(:article, 10, user_id: user.id) }
     let(:article_id) { articles.first.id }
-    before { delete "/api/v1/articles/#{article_id}" }
+    before { delete "/api/v1/articles/#{article_id}", headers: valid_headers }
 
     it 'returns status code 204' do
       expect(response).to have_http_status(204)
