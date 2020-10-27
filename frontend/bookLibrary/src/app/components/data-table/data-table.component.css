@@ -1,0 +1,25 @@
+:host {
+	width: 100%;
+}
+
+table {
+	width: 100%;
+}
+
+.mat-form-field {
+	font-size: 14px;
+	width: 100%;
+}
+
+.actions{
+	width: 20%;
+}
+
+.m-bot15 {
+	margin-bottom: 15px;
+}
+
+.update-but {
+	margin-right: 10px;
+}
+
