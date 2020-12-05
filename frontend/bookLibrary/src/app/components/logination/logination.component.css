@@ -1,0 +1,35 @@
+:host {
+  display: block; }
+
+.invalid-feedback {
+  color: red; }
+
+.backBut {
+  display: inline-block; }
+
+.container {
+  font-family: 'Roboto', serif;
+  padding: 10px 50px 50px; }
+
+h2 {
+  /*text-align: center;*/
+  margin-left: 35px;
+  margin-bottom: 50px; }
+
+h2 small {
+  font-weight: normal;
+  color: #888;
+  display: block; }
+
+.group {
+  margin-bottom: 45px; }
+
+.example-form {
+  min-width: 200px;
+  max-width: 300px;
+  width: 100%; }
+
+.example-full-width {
+  width: 100%; }
+
+/*# sourceMappingURL=logination.component.css.map */

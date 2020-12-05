@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAAA,cAAe;EACb,OAAO,EAAE,IAAI;EACb,eAAe,EAAE,MAAM",
+"sources": ["register.component.scss"],
+"names": [],
+"file": "register.component.css"
+}

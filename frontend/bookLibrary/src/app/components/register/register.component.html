@@ -1,0 +1,8 @@
+<div class="register-page">
+  <app-logination
+    title="Register"
+    (data)="register($event)"
+    [showMode]="registerVal.Register"
+  ></app-logination>
+</div>
+<app-toaster *ngIf="loading"></app-toaster>

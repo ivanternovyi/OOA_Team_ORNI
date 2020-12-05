@@ -1,0 +1,61 @@
+<div class="container">
+  <h2>{{ title }}</h2>
+  <form [formGroup]="form" (ngSubmit)="onSubmit(form.value)" class="example-form">
+    <div class="group">
+      <mat-form-field class="example-full-width">
+        <input matInput placeholder="Username" formControlName="username" required>
+        <mat-error>
+          <mat-error *ngIf="form.get('username').hasError('required')">
+            UserName is <strong>required</strong>
+          </mat-error>
+          <mat-error *ngIf="!form.get('username').hasError('minLength') && !form.get('username').hasError('required')">
+            UserName is <strong>to short</strong> required min Length: 3
+          </mat-error>
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <!--    <div *ngIf="showMode === log.Register || showMode === log.Edit  ">-->
+    <!--      <div class="group">-->
+    <!--        <mat-form-field class="example-full-width">-->
+    <!--          <input matInput placeholder="First Name" formControlName="firstName" required>-->
+    <!--          <mat-error *ngIf="form.get('firstName').hasError('required')">-->
+    <!--            firstName is <strong>required</strong>-->
+    <!--          </mat-error>-->
+    <!--          <mat-error *ngIf="!form.get('firstName').hasError('minLength') && !form.get('username').hasError('required')">-->
+    <!--            firstName is <strong>to short</strong> required min Length: 3-->
+    <!--          </mat-error>-->
+    <!--        </mat-form-field>-->
+    <!--      </div>-->
+    <!--      <div class="group">-->
+    <!--        <mat-form-field class="example-full-width">-->
+    <!--          <input matInput placeholder="First Name" formControlName="lastName" required>-->
+    <!--          <mat-error *ngIf="form.get('lastName').hasError('required')">-->
+    <!--            lastName is <strong>required</strong>-->
+    <!--          </mat-error>-->
+    <!--          <mat-error *ngIf="!form.get('lastName').hasError('minLength') && !form.get('username').hasError('required')">-->
+    <!--            lastName is <strong>to short</strong> required min Length: 3-->
+    <!--          </mat-error>-->
+    <!--        </mat-form-field>-->
+    <!--      </div>-->
+    <!--    </div>-->
+
+    <div class="group">
+      <mat-form-field class="example-full-width">
+        <input matInput placeholder="Password" type="password" formControlName="password" required>
+        <mat-error *ngIf="form.get('password').hasError('required')">
+          password is <strong>required</strong>
+        </mat-error>
+        <mat-error *ngIf="!form.get('password').hasError('minLength') && !form.get('username').hasError('required')">
+          password is <strong>to short</strong> required min Length: 6
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <button mat-raised-button color="primary" class="btn" type="submit">{{ title }}</button>
+    <h2 *ngIf="showMode === log.Login " style="margin-top: 30px"><small>Are you new here? <a [routerLink]="'/register'">Register</a></small>
+    </h2>
+    <div class="backBut" *ngIf="showMode !== log.Login">
+      <button mat-raised-button color="warn" class="btn" (click)="back()">Back</button>
+    </div>
+  </form>
+</div>
+

@@ -1,0 +1,8 @@
+<div class="login-page">
+  <app-logination
+    title="Login"
+    (data)="login($event)"
+    [showMode]="loginVal.Login"
+  ></app-logination>
+</div>
+<app-toaster *ngIf="loading"></app-toaster>

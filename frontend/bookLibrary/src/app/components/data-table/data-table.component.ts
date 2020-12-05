@@ -34,6 +34,7 @@ export interface Article {
   created_at: string;
 }
 
+
 /** Constants used to fill up our data base. */
 const COLORS: string[] = [
   'maroon', 'red', 'orange', 'yellow', 'olive', 'green', 'purple', 'fuchsia', 'lime', 'teal',
@@ -48,10 +49,11 @@ const NAMES: string[] = [
 @Component({
   selector: 'app-data-table',
   templateUrl: './data-table.component.html',
-  styleUrls: ['./data-table.component.css']
+  styleUrls: ['./data-table.component.scss']
 })
-export class DataTableComponent implements AfterViewInit {
+export class DataTableComponent implements OnInit, AfterViewInit {
   articlesUrl = 'http://localhost:3000/api/v1/articles/';
+
 
   displayedColumns: string[] = ['id', 'name', 'text', 'article_type', 'updated_at', 'created_at', 'actions'];
   dataSource: MatTableDataSource<ArticleData>;
@@ -75,6 +77,14 @@ export class DataTableComponent implements AfterViewInit {
   }
 
   // tslint:disable-next-line:typedef
+  ngOnInit() {
+    const idToken = localStorage.getItem('id_token');
+    this.httpOptions.headers = new HttpHeaders({
+      Authorization: 'Bearer ' + idToken
+    });
+  }
+
+  // tslint:disable-next-line:typedef
   ngAfterViewInit() {
     this.updateArticlesData();
   }
@@ -95,8 +105,6 @@ export class DataTableComponent implements AfterViewInit {
       if (articleData && articleData.name && articleData.text && articleData.article_type) {
         this.addArticle(articleData);
       }
-      console.log(articleData);
-      console.log('The dialog was closed');
     });
   }
 
@@ -112,7 +120,6 @@ export class DataTableComponent implements AfterViewInit {
       if (articleData && articleData.name && articleData.text && articleData.article_type) {
         this.updateArticle(data.id, articleData);
       }
-      console.log('The dialog was closed');
     });
   }
 
@@ -129,13 +136,12 @@ export class DataTableComponent implements AfterViewInit {
   }
 
   getArticles(): Observable<any> {
-    return this.http.get<any>(this.articlesUrl);
+    return this.http.get<any>(this.articlesUrl, this.httpOptions);
   }
 
   addArticle(article): any {
     return this.http.post<Article>(this.articlesUrl, article, this.httpOptions)
       .toPromise().then(res => {
-        console.log(res);
         this.updateArticlesData();
       });
   }
@@ -143,7 +149,6 @@ export class DataTableComponent implements AfterViewInit {
   updateArticle(id, article): any {
     return this.http.put<Article>(this.articlesUrl + id, article, this.httpOptions)
       .toPromise().then(res => {
-        console.log(res);
         this.updateArticlesData();
       });
   }
@@ -165,17 +170,4 @@ export class DataTableComponent implements AfterViewInit {
       this.dataSource.paginator.firstPage();
     }
   }
-}
-
-/** Builds and returns a new User. */
-function createNewUser(id: number): UserData {
-  const name = NAMES[Math.round(Math.random() * (NAMES.length - 1))] + ' ' +
-    NAMES[Math.round(Math.random() * (NAMES.length - 1))].charAt(0) + '.';
-
-  return {
-    id: id.toString(),
-    name,
-    progress: Math.round(Math.random() * 100).toString(),
-    color: COLORS[Math.round(Math.random() * (COLORS.length - 1))]
-  };
 }

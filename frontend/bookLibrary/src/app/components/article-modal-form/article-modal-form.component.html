@@ -3,15 +3,21 @@
 	<p>Enter articles data</p>
 	<mat-form-field>
 		<mat-label>Name: </mat-label>
-		<input matInput [(ngModel)]="data.name">
+		<input matInput
+           [formControl]="form.get('name')"
+           [value]="form.get('name').value"
+    >
 	</mat-form-field>
 	<mat-form-field>
 		<mat-label>Text: </mat-label>
-		<input matInput [(ngModel)]="data.text">
+		<input matInput
+           [formControl]="form.get('text')"
+           [value]="form.get('text').value"
+    >
 	</mat-form-field>
 	<mat-form-field appearance="fill">
 		<mat-label>Article type: </mat-label>
-		<mat-select [(ngModel)]="data.article_type" name="article_type">
+		<mat-select [formControl]="form.get('article_type')" name="article_type">
 			<mat-option *ngFor="let articleType of articleTypes" [value]="articleType">
 				{{articleType}}
 			</mat-option>
@@ -20,5 +26,5 @@
 </div>
 <div mat-dialog-actions>
 	<button mat-button (click)="onNoClick()">No Thanks</button>
-	<button mat-button [mat-dialog-close]="data" cdkFocusInitial>Ok</button>
+	<button mat-button [mat-dialog-close]="form.value" cdkFocusInitial>Ok</button>
 </div>

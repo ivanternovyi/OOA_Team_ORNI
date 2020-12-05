@@ -1,0 +1,109 @@
+.main-container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+
+
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+//@import 'compass'; // for random() function
+// this is evidently broken
+
+$bubbles: ();
+$move: ();
+
+@for $i from 0 through 10 {
+  $size: (random(120) + 50) / 100 * 1em;
+
+  $start-x: (random(110) - 10) * 1%;
+  $start-y: (random(150) + 80) * 1%;
+
+  $end-x: $start-x + (random(10) - 10);
+  $end-y: (random(60) - 400) * 1%;
+
+  $bubbles: append($bubbles,
+    radial-gradient(circle at center, transparent 30%, #eef 60%, #eef 65%, transparent 70%) $start-x $start-y / #{$size} #{$size}, comma);
+
+  $move: append($move, $end-x $end-y, comma);
+}
+
+.btn-bubble {
+  color: white;
+
+  background-color: #77b11c;
+  background-repeat: no-repeat;
+
+  &:hover,
+  &:focus {
+    animation: bubbles 1s forwards ease-out;
+    background: $bubbles;
+    background-color: #77b11c;
+    background-repeat: no-repeat;
+  }
+}
+
+@keyframes bubbles {
+  100% {
+    background-position: $move;
+    box-shadow: inset 0 -6.5em 0 #0072c4;
+  }
+}
+
+//=== Pen styling, ignore
+//body {
+//  background: #10192d;
+//  display: flex;
+//  min-height: 100vh;
+//  justify-content: center;
+//  align-content: center;
+//  align-items: center;
+//}
+
+.btn {
+  display: inline-block;
+  text-decoration: none;
+  text-align: center;
+  margin-left: 20px;
+  height: 30px;
+  padding: 5px 10px 40px;
+  vertical-align: center;
+}
+
+.logOutBut {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  margin-left: 10px;
+  //color: white;
+  //background: red;
+}
+
+.editBut {
+  position: absolute;
+  right: 100px;
+  top: 10px;
+  margin-left: 10px;
+  //color: white;
+  //background: cadetblue;
+}
+
+.pollBut {
+  position: absolute;
+  right: 10px;
+  top: 60px;
+  margin-left: 10px;
+  //color: white;
+  //background: red;
+}
+
+app-root {
+  position: relative;
+}
+
+
+
+
