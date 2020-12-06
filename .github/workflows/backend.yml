@@ -1,0 +1,71 @@
+name: Build Backend
+
+on:
+  push:
+    branches:
+      - "**"
+    changes:
+      - "backend/**"
+    paths-ignore:
+      - "**/.bumpversion.cfg"
+      - "**/VERSION"
+      - "**/README.md"
+
+env:
+  DOCKER_URL: docker.pkg.github.com/ivanternovyi/ooa_team_orni
+
+defaults:
+  run:
+    working-directory: backend
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - name: Install deps
+        run: bundle install --jobs `expr $(cat /proc/cpuinfo | grep -c "cpu cores") - 1` --retry 3
+      - name: Run Tests
+        run: PARALLEL_WORKERS=`expr $(cat /proc/cpuinfo | grep -c "cpu cores")` ./bin/rails test
+  docker_build:
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install deps
+        run: sudo pip install -r ../requirements.txt
+      - name: Build the Docker image
+        run: docker build -t ${DOCKER_URL}/backend:latest .
+      - name: Save the Docker image for testing
+        if: github.ref != 'refs/heads/master'
+        run: mkdir images && docker save -o images/backend.tar.gz ${DOCKER_URL}/backend:latest
+      - name: Upload the image to the artifacts
+        uses: actions/upload-artifact@v2
+        if: github.ref != 'refs/heads/master'
+        with:
+          name: docker-image
+          path: images
+      - name: Docker login
+        if: github.ref == 'refs/heads/master'
+        run: docker login docker.pkg.github.com -u ivanternovyi -p ${{ secrets.GITHUB_TOKEN }}
+      - name: Update the version
+        if: github.ref == 'refs/heads/master'
+        run: |
+          set -x
+          git config --local user.email "bot@example.com"
+          git config --local user.name "CI"
+          bumpversion --tag patch
+      - name: Tag and push the new version
+        if: github.ref == 'refs/heads/master'
+        run: |
+          set -x
+          docker tag ${DOCKER_URL}/backend:latest ${DOCKER_URL}/backend:$(cat VERSION)
+          docker push ${DOCKER_URL}/backend:$(cat VERSION)
+          docker push ${DOCKER_URL}/backend:latest
+      - name: Push the tags and commits
+        if: github.ref == 'refs/heads/master'
+        run: |
+          git push --tags
+          git push

@@ -1,11 +1,12 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {MatTableDataSource} from '@angular/material/table';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatSort} from '@angular/material/sort';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {Observable} from 'rxjs';
-import {MatDialog} from '@angular/material/dialog';
-import {ArticleModalFormComponent} from '../article-modal-form/article-modal-form.component';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { ArticleModalFormComponent } from '../article-modal-form/article-modal-form.component';
+import { environment } from 'src/environments/environment';
 
 
 export interface UserData {
@@ -52,14 +53,14 @@ const NAMES: string[] = [
   styleUrls: ['./data-table.component.scss']
 })
 export class DataTableComponent implements OnInit, AfterViewInit {
-  articlesUrl = 'http://localhost:3000/api/v1/articles/';
+  articlesUrl = environment.apiUrl + '/api/v1/articles/';
 
 
   displayedColumns: string[] = ['id', 'name', 'text', 'article_type', 'updated_at', 'created_at', 'actions'];
   dataSource: MatTableDataSource<ArticleData>;
 
   httpOptions = {
-    headers: new HttpHeaders({'Content-Type': 'application/json'})
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
 
   articleData = {
@@ -73,7 +74,7 @@ export class DataTableComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(private http: HttpClient,
-              public dialog: MatDialog) {
+    public dialog: MatDialog) {
   }
 
   // tslint:disable-next-line:typedef
