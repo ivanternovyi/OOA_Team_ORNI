@@ -9,7 +9,7 @@ on:
     paths-ignore:
       - "**/.bumpversion.cfg"
       - "**/VERSION"
-      - "**/.*"
+      - "frontend/**/.*"
       - "**/karma.conf.js"
       - "**/README.md"
 

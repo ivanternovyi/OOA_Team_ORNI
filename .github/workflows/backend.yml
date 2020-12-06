@@ -25,9 +25,9 @@ jobs:
     continue-on-error: true
     steps:
       - name: Install deps
-        run: bundle install --jobs `expr $(cat /proc/cpuinfo | grep -c "cpu cores") - 1` --retry 3
+        run: bundle install --jobs 1
       - name: Run Tests
-        run: PARALLEL_WORKERS=`expr $(cat /proc/cpuinfo | grep -c "cpu cores")` ./bin/rails test
+        run: PARALLEL_WORKERS=2 ./bin/rails test
   docker_build:
     name: Build Docker Image
     runs-on: ubuntu-latest
