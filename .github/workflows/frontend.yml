@@ -35,7 +35,7 @@ jobs:
       - name: Check build
         run: yarn build
       - name: Run Tests
-        run: yarn test
+        run: yarn test --watch=false --browsers=ChromeHeadless
   docker_build:
     name: Build Docker Image
     runs-on: ubuntu-latest
