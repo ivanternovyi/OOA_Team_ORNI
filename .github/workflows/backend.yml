@@ -61,7 +61,7 @@ jobs:
           set -x
           git config --local user.email "bot@example.com"
           git config --local user.name "CI"
-          bumpversion --tag patch
+          bumpversion patch
       - name: Tag and push the new version
         if: github.ref == 'refs/heads/master'
         run: |
