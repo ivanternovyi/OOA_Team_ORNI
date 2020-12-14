@@ -25,6 +25,8 @@ jobs:
     continue-on-error: true
     steps:
       - uses: actions/checkout@v2
+      - name: Install bundler
+        run: gem install bundler
       - name: Install deps
         run: bundle install --jobs 1
       - name: Run Tests
