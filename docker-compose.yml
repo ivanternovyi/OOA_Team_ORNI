@@ -1,0 +1,36 @@
+version: '3'
+services:
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_PASSWORD: "password123$$"
+      POSTGRES_USER: "test"
+      POSTGRES_DB: "test_db"
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+  backend:
+    image: orni/backend:latest
+    build: ./backend
+    volumes:
+      - ./backend:/app
+    ports:
+      - "3000:3000"
+    environment:
+      RAILS_ENV: production
+      BACKEND_DATABASE_HOST: db
+      BACKEND_DATABASE_NAME: test_db
+      BACKEND_DATABASE_USERNAME: test
+      BACKEND_DATABASE_PASSWORD: password123$$
+      SECRET_KEY_BASE: 92ba17b0d5123e70676a44ed325e781a2d4a779e102f263b105dc6db077a764a4f3f0f80e71e6f61ee13ce3a50cf74f5108a3521c386c4e0087a39c2709906bd
+    depends_on:
+      - db
+  frontend:
+    image: orni/frontend:latest
+    build: ./frontend/bookLibrary
+    ports:
+      - "8080:80"
+    environment:
+      BACKEND_URL: http://backend:3000
+    depends_on:
+      - backend
+    
