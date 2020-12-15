@@ -4,8 +4,9 @@ on:
   push:
     branches:
       - "**"
-    changes:
+    paths:
       - "backend/**"
+      - ".github/workflows/backend.yml"
     paths-ignore:
       - "**/.bumpversion.cfg"
       - "**/VERSION"
