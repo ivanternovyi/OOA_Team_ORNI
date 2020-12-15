@@ -6,7 +6,7 @@ on:
       - "**"
     paths-ignore:
       - "backend/**"
-      - .github/workflows/baclend.yml
+      - .github/workflows/backend.yml
       - .docker-compose.yml
       - docs
       - "**/.bumpversion.cfg"
@@ -78,5 +78,6 @@ jobs:
       - name: Push the tags and commits
         if: github.ref == 'refs/heads/master'
         run: |
+          git pull --allow-unrelated-histories
           git push --tags
           git push
