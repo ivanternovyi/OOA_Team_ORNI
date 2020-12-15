@@ -75,5 +75,6 @@ jobs:
       - name: Push the tags and commits
         if: github.ref == 'refs/heads/master'
         run: |
+          git pull --allow-unrelated-histories
           git push --tags
           git push
