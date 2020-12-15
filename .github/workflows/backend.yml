@@ -4,13 +4,15 @@ on:
   push:
     branches:
       - "**"
-    paths:
-      - "backend/**"
-      - ".github/workflows/backend.yml"
     paths-ignore:
+      - "frontend/**"
+      - .github/workflows/frontend.yml
       - "**/.bumpversion.cfg"
       - "**/VERSION"
       - "**/README.md"
+      - "**/.gitignore"
+      - docs
+      - .docker-compose.yml
 
 env:
   DOCKER_URL: docker.pkg.github.com/ivanternovyi/ooa_team_orni
