@@ -4,11 +4,14 @@ on:
   push:
     branches:
       - "**"
-    changes:
-      - "frontend/**"
     paths-ignore:
+      - "backend/**"
+      - .github/workflows/baclend.yml
+      - .docker-compose.yml
+      - docs
       - "**/.bumpversion.cfg"
       - "**/VERSION"
+      - "**/.gitignore"
       - "frontend/**/.*"
       - "**/karma.conf.js"
       - "**/README.md"
